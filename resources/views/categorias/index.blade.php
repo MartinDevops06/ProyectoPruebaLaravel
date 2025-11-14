@@ -30,16 +30,17 @@
                 </td>
                 
                 <td>
+                    
                     <a href="{{route('categorias.edit',$categoria->id)}}" class ="btn btn-info">
-                        <img src="{{url ('img/icons8-editar.gif') }}" width="25">
-                    </a>
+                        Editar
+                    </a> 
 
-                    <form action="{{ route('categorias.destroy', $categoria->id) }}" metohd="POST">
+                    <form action="{{ route('categorias.destroy', $categoria->id) }}" method="POST">
 
                         @csrf
                         @method("DELETE")
-                        <button class="btn bnt-danger" onclicks="return confirm('¿Quiere eliminar el reegistro?')">
-                            <img src="{{ url('img/icons8-borrar-100.png') }}" width="25">
+                        <button class="btn btn-danger" onclicks="return confirm('¿Quiere eliminar el reegistro?')">
+                            Eliminar
                         </button>
                     </form>
                 </td>

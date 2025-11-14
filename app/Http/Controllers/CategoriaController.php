@@ -61,13 +61,14 @@ class CategoriaController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $datos = Categoria::find($id);
+        return view('categorias.edit', compact('datos'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Categoria $categoria)
     {
         // dd($request);
         $validator = Validator::make($request->all(),[
@@ -79,9 +80,9 @@ class CategoriaController extends Controller
                          ->withInput();
         }
         else{
-            Categoria->update($request ->all());
+            $categoria->update($request->all());
 
-            return redirect('categorias')->with('type','Succes')
+            return redirect('categorias')->with('type','warning')
                                          ->with('message','Registro actualizado exitosamente');
         }
     }
