@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Categoria;
+use Illuminate\Support\Facades\Validator;
 
 class CategoriaController extends Controller
 {
@@ -31,8 +32,20 @@ class CategoriaController extends Controller
     public function store(Request $request)
     {
         // dd($request);
-        Categoria::create($request ->all());
-        return redirect('categorias');
+        $validator = Validator::make($request->all(),[
+            'nombre' => 'required|max:50',
+            'descripcion' => 'required|max:200'
+        ]);
+        if ($validator->fails()){
+            return back()->withErrors($validator)
+                         ->withInput();
+        }
+        else{
+            Categoria::create($request->only(['nombre', 'descripcion']));
+
+            return redirect('categorias')->with('type','Succes')
+                                         ->with('message','Registro creado exitosamente');
+        }
     }
 
     /**
@@ -56,7 +69,21 @@ class CategoriaController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // dd($request);
+        $validator = Validator::make($request->all(),[
+            'nombre' => 'required|max:50',
+            'descripcion' => 'required|max:200'
+        ]);
+        if ($validator->fails()){
+            return back()->withErrors($validator)
+                         ->withInput();
+        }
+        else{
+            Categoria->update($request ->all());
+
+            return redirect('categorias')->with('type','Succes')
+                                         ->with('message','Registro actualizado exitosamente');
+        }
     }
 
     /**
@@ -64,6 +91,8 @@ class CategoriaController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        Categoria::destroy($id);
+        return redirect('categorias')->with('type', 'danger')
+                                     ->with('message', 'EL resgistro se elimino');
     }
 }
