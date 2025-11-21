@@ -3,20 +3,19 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Usuario;
+use App\Models\Categoria;
 use Illuminate\Support\Facades\Validator;
 
-
-class UsuarioController extends Controller
+class CategoriaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $datos = Usuario::all();
-        //
-        return view('usuarios.index', compact('datos'));
+        $datos = Categoria::all();
+        //dd($datos);
+        return view('categorias.index', compact('datos'));
     }
 
     /**
@@ -24,8 +23,7 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        //
-        return view('usuarios.new');
+        return view('categorias.new');
     }
 
     /**
@@ -33,25 +31,19 @@ class UsuarioController extends Controller
      */
     public function store(Request $request)
     {
-
         // dd($request);
         $validator = Validator::make($request->all(),[
             'nombre' => 'required|max:50',
-            'apellidos' => 'required|max:100',
-            'correo' => 'required|max:150',
-            'telefono' => 'required|max:10',
-            'direccion' => 'required|max:100',
-            'DocumentoId' => 'required|max:11',
-            'password' => 'required|max:100'
+            'descripcion' => 'required|max:200'
         ]);
         if ($validator->fails()){
             return back()->withErrors($validator)
                          ->withInput();
         }
         else{
-            Usuario::create($request->only(['nombre','apellidos','correo','telefono','direccion','DocumentoId','password']));
+            Categoria::create($request->only(['nombre', 'descripcion']));
 
-            return redirect('usuarios')->with('type','Succes')
+            return redirect('categorias')->with('type','Succes')
                                          ->with('message','Registro creado exitosamente');
         }
     }
@@ -69,35 +61,29 @@ class UsuarioController extends Controller
      */
     public function edit(string $id)
     {
-        //
-        $datos = Usuario::find($id);
-        return view('usuarios.edit', compact('datos'));
+        $datos = Categoria::find($id);
+        return view('categorias.edit', compact('datos'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Usuario $usuario)
+    public function update(Request $request, Categoria $categoria)
     {
         // dd($request);
         $validator = Validator::make($request->all(),[
             'nombre' => 'required|max:50',
-            'apellidos' => 'required|max:100',
-            'correo' => 'required|max:150',
-            'telefono' => 'required|max:10',
-            'direccion' => 'required|max:100',
-            'DocumentoId' => 'required|max:11',
-            'password' => 'required|max:100'
+            'descripcion' => 'required|max:200'
         ]);
         if ($validator->fails()){
             return back()->withErrors($validator)
                          ->withInput();
         }
         else{
-            $usuario->update($request->all());
+            $categoria->update($request->all());
 
-            return redirect('usuarios')->with('type','warning')
-                                         ->with('message','Editado exitosamente');
+            return redirect('categorias')->with('type','warning')
+                                         ->with('message','Registro actualizado exitosamente');
         }
     }
 
@@ -106,9 +92,8 @@ class UsuarioController extends Controller
      */
     public function destroy(string $id)
     {
-        //
-        Usuario::destroy($id);
-        return redirect('usuarios')->with('type', 'danger')
+        Categoria::destroy($id);
+        return redirect('categorias')->with('type', 'danger')
                                      ->with('message', 'EL resgistro se elimino');
     }
 }
